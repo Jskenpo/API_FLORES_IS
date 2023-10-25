@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Imagen desde base de datos</title>
+</head>
+<body>
+    
+
+    <script>
+        const fetchImage = async () => {
+            const response = await fetch('http://localhost:3161/arreglos');
+            const data = await response.json();
+
+            return data.foto; 
+        }
+
+        const getImage = async () => {
+            const imageBuffer = await fetchImage();
+
+            const img = document.createElement('img');
+
+            // Intenta crear la imagen como Blob first
+            const blob = new Blob([imageBuffer], {type: 'image/jpeg'});
+            img.src = URL.createObjectURL(blob);
+
+            // Si lo anterior falla, intenta directamente como base64
+            if(!img.src) {
+                img.src = `data:image/jpeg;base64,${imageBuffer.toString('base64')}`; 
+            }
+
+            document.body.appendChild(img);
+        }
+
+            getImage();
+    </script>
+</body>
+</html>
