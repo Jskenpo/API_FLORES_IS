@@ -71,10 +71,58 @@ const getArreglos = async (req, res) => {
     }
 }
 
+const postOrden = async (req, res) => {
+    const {fecha, id_cliente, subtotal, envio, total} = req.body;
+    const consulta = `
+    INSERT INTO orden (fecha, id_cliente, subtotal, envio, total)
+    VALUES ($1, $2, $3, $4, $5)`
+
+    try{
+        const response = await pool.query(consulta, [fecha, id_cliente, subtotal, envio, total]);
+        const arreglo = response.rows;
+
+        console.log(arreglo);
+        res.status(200).json({
+            message: 'Orden agregada correctamente',
+            body: {
+                user: { fecha, id_cliente, subtotal, envio, total }
+            }
+        });
+    }catch (e) {
+      console.log(e);
+      res.status(500).json({ error: 'Error en el servidor' });
+    }
+}
+
+const postOrdenDetalle = async (req, res) => {
+    const {id_orden, sku, cantidad, precio} = req.body;
+    const consulta = `
+    INSERT INTO ordendetalle (id_orden, sku, cantidad, precio)
+    VALUES ($1, $2, $3, $4)`
+
+    try{
+        const response = await pool.query(consulta, [id_orden, sku, cantidad, precio]);
+        const arreglo = response.rows;
+
+        console.log(arreglo);
+        res.status(200).json({
+            message: 'Detalle de orden agregada correctamente',
+            body: {
+                user: { id_orden, sku, cantidad, precio }
+            }
+        });
+    }catch (e) {
+      console.log(e);
+      res.status(500).json({ error: 'Error en el servidor' });
+    }
+}
+
 
 
 module.exports = {
     getArregloByCategory,
     getCategories,
-    getArreglos
+    getArreglos,
+    postOrden,
+    postOrdenDetalle
 };
