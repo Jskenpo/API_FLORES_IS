@@ -117,6 +117,47 @@ const postOrdenDetalle = async (req, res) => {
     }
 }
 
+const getClientebyBody = async (req, res) => {
+    const {nombre, nit } = req.body;
+    const consulta = `
+    SELECT id_cliente  FROM cllientes
+    WHERE nombre = $1 AND nit = $2`
+
+    try{
+        const response = await pool.query(consulta, [nombre, nit]);
+        const arreglo = response.rows;
+        console.log(arreglo);
+        res.status(200).json(arreglo);
+    }catch (e) {
+      console.log(e);
+      res.status(500).json({ error: 'Error en el servidor' });
+    }
+}
+
+
+const postCliente = async (req, res) => {
+    const {nombre, nit, direccion, telefono, correo, cod_postal } = req.body;
+    const consulta = `
+    INSERT INTO cllientes (nombre, nit, direccion, telefono, correo, cod_postal)
+    VALUES ($1, $2, $3, $4, $5, $6)`
+
+    try{
+        const response = await pool.query(consulta, [nombre, nit, direccion, telefono, correo, cod_postal]);
+        const arreglo = response.rows;
+
+        console.log(arreglo);
+        res.status(200).json({
+            message: 'Cliente agregado correctamente',
+            body: {
+                user: { nombre, nit }
+            }
+        });
+    }catch (e) {
+      console.log(e);
+      res.status(500).json({ error: 'Error en el servidor' });
+    }
+}
+
 
 
 module.exports = {
@@ -124,5 +165,7 @@ module.exports = {
     getCategories,
     getArreglos,
     postOrden,
-    postOrdenDetalle
+    postOrdenDetalle,
+    getClientebyBody,
+    postCliente
 };
