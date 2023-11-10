@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cliente HTML</title>
+</head>
+<body>
+
+    <h1>Cliente HTML</h1>
+
+    <form id="clienteForm">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" required>
+
+        <label for="nit">NIT:</label>
+        <input type="text" id="nit" name="nit" required>
+
+        <button type="button" onclick="realizarSolicitud()">Enviar Solicitud</button>
+    </form>
+
+    <script>
+        function realizarSolicitud() {
+            const nombre = document.getElementById('nombre').value;
+            const nit = document.getElementById('nit').value;
+
+            const data = {
+                datos: [
+                    { nombre: nombre, nit: nit },
+                    // Puedes agregar más elementos al array si es necesario
+                ]
+            };
+
+            fetch('http://localhost:3161/clienteByBody', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    const id_cliente = data.id_cliente;
+                    console.log('ID del Cliente:', id_cliente);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+    </script>
+
+</body>
+</html>

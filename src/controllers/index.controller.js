@@ -117,15 +117,15 @@ const postOrdenDetalle = async (req, res) => {
     }
 }
 
-const getClientebyBody = async (req, res) => {
-    const {nombre, nit } = req.body;
+const getClienteByID = async (req, res) => {
+    const nit = req.params.id;
     const consulta = `
-    SELECT id_cliente  FROM cllientes
-    WHERE nombre = $1 AND nit = $2`
+    SELECT id_cliente, nombre FROM cllientes WHERE nit = $1`
 
     try{
-        const response = await pool.query(consulta, [nombre, nit]);
+        const response = await pool.query(consulta, [nit]);
         const arreglo = response.rows;
+
         console.log(arreglo);
         res.status(200).json(arreglo);
     }catch (e) {
@@ -182,7 +182,7 @@ module.exports = {
     getArreglos,
     postOrden,
     postOrdenDetalle,
-    getClientebyBody,
+    getClienteByID,
     postCliente,
     getLastOrder
 };

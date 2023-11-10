@@ -5,7 +5,7 @@ const { getArregloByCategory,
     getCategories, 
     getArreglos, postOrden, 
     postOrdenDetalle, 
-    getClientebyBody, 
+    getClienteByID, 
     postCliente,
     getLastOrder } = require('../controllers/index.controller');
 
@@ -16,9 +16,9 @@ router.get('/LastOrder', getLastOrder);
 
 //GET BY ID
 router.get('/arreglos/:id', getArregloByCategory);
+router.get('/cliente/:id', getClienteByID);
 
 //GET BY BODY
-router.get('/cliente', getClientebyBody);
 
 //POST
 router.post('/orden', postOrden);
