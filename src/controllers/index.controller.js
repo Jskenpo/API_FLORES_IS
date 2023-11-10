@@ -158,6 +158,22 @@ const postCliente = async (req, res) => {
     }
 }
 
+const getLastOrder = async (req, res) => {
+    const consulta = `
+    select id_orden from orden order by id_orden desc limit 1`
+
+    try{
+        const response = await pool.query(consulta);
+        const arreglo = response.rows;
+
+        console.log(arreglo);
+        res.status(200).json(arreglo);
+    }catch (e) {
+      console.log(e);
+      res.status(500).json({ error: 'Error en el servidor' });
+    }
+}
+
 
 
 module.exports = {
@@ -167,5 +183,6 @@ module.exports = {
     postOrden,
     postOrdenDetalle,
     getClientebyBody,
-    postCliente
+    postCliente,
+    getLastOrder
 };
